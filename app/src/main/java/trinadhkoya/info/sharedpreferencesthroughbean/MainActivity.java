@@ -1,52 +1,123 @@
 package trinadhkoya.info.sharedpreferencesthroughbean;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.View;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class MainActivity extends AppCompatActivity {
+import trinadhkoya.info.sharedpreferencesthroughbean.fragment.FavoriteListFragment;
+import trinadhkoya.info.sharedpreferencesthroughbean.fragment.ProductListFragment;
+
+
+public class MainActivity extends FragmentActivity {
+
+    ProductListFragment pdtListFragment;
+    FavoriteListFragment favListFragment;
+    private Fragment contentFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
+		/*
+		 * This is called when orientation is changed.
+		 */
+        if (savedInstanceState != null) {
+            if (savedInstanceState.containsKey("content")) {
+                String content = savedInstanceState.getString("content");
+                if (content.equals(FavoriteListFragment.ARG_ITEM_ID)) {
+                    if (fragmentManager.findFragmentByTag(FavoriteListFragment.ARG_ITEM_ID) != null) {
+                        setFragmentTitle(R.string.favorites);
+                        contentFragment = fragmentManager
+                                .findFragmentByTag(FavoriteListFragment.ARG_ITEM_ID);
+                    }
+                }
             }
-        });
+            if (fragmentManager.findFragmentByTag(ProductListFragment.ARG_ITEM_ID) != null) {
+                pdtListFragment = (ProductListFragment) fragmentManager
+                        .findFragmentByTag(ProductListFragment.ARG_ITEM_ID);
+                contentFragment = pdtListFragment;
+            }
+        } else {
+            pdtListFragment = new ProductListFragment();
+            setFragmentTitle(R.string.app_name);
+            switchContent(pdtListFragment, ProductListFragment.ARG_ITEM_ID);
+        }
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        if (contentFragment instanceof FavoriteListFragment) {
+            outState.putString("content", FavoriteListFragment.ARG_ITEM_ID);
+        } else {
+            outState.putString("content", ProductListFragment.ARG_ITEM_ID);
+        }
+        super.onSaveInstanceState(outState);
+    }
+
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        switch (item.getItemId()) {
+            case R.id.menu_favorites:
+                setFragmentTitle(R.string.favorites);
+                favListFragment = new FavoriteListFragment();
+                switchContent(favListFragment, FavoriteListFragment.ARG_ITEM_ID);
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+                return true;
         }
-
         return super.onOptionsItemSelected(item);
+    }
+
+    public void switchContent(Fragment fragment, String tag) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        while (fragmentManager.popBackStackImmediate()) ;
+
+        if (fragment != null) {
+            FragmentTransaction transaction = fragmentManager
+                    .beginTransaction();
+            transaction.replace(R.id.content_frame, fragment, tag);
+            //Only FavoriteListFragment is added to the back stack.
+            if (!(fragment instanceof ProductListFragment)) {
+                transaction.addToBackStack(tag);
+            }
+            transaction.commit();
+            contentFragment = fragment;
+        }
+    }
+
+    protected void setFragmentTitle(int resourseId) {
+        setTitle(resourseId);
+        getActionBar().setTitle(resourseId);
+
+    }
+
+    /*
+     * We call super.onBackPressed(); when the stack entry count is > 0. if it
+     * is instanceof ProductListFragment or if the stack entry count is == 0, then
+     * we finish the activity.
+     * In other words, from ProductListFragment on back press it quits the app.
+     */
+    @Override
+    public void onBackPressed() {
+        FragmentManager fm = getSupportFragmentManager();
+        if (fm.getBackStackEntryCount() > 0) {
+            super.onBackPressed();
+        } else if (contentFragment instanceof ProductListFragment
+                || fm.getBackStackEntryCount() == 0) {
+            finish();
+        }
     }
 }
