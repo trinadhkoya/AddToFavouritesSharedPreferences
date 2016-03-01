@@ -6,7 +6,7 @@
 
     <!-- <fragment
         android:id="@+id/fragment_product_list"
-        android:name="com.androidopentutorials.spfavorites.fragment.ProductListFragment"
+        android:name="com.androidopentutorials.spfavorites.fragment.DoctorListFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" /> -->
 

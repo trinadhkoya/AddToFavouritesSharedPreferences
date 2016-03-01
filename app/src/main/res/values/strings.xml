@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">SharedPreferencesThroughBean</string>
     <string name="action_settings">Settings</string>
-    <string name="favorites">Add to Fav</string>
+    <string name="favorites">My Cart</string>
 </resources>

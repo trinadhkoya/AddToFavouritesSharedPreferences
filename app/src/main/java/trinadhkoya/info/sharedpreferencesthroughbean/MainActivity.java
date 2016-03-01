@@ -8,13 +8,13 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import trinadhkoya.info.sharedpreferencesthroughbean.fragment.DoctorListFragment;
 import trinadhkoya.info.sharedpreferencesthroughbean.fragment.FavoriteListFragment;
-import trinadhkoya.info.sharedpreferencesthroughbean.fragment.ProductListFragment;
 
 
 public class MainActivity extends FragmentActivity {
 
-    ProductListFragment pdtListFragment;
+    DoctorListFragment pdtListFragment;
     FavoriteListFragment favListFragment;
     private Fragment contentFragment;
 
@@ -39,15 +39,15 @@ public class MainActivity extends FragmentActivity {
                     }
                 }
             }
-            if (fragmentManager.findFragmentByTag(ProductListFragment.ARG_ITEM_ID) != null) {
-                pdtListFragment = (ProductListFragment) fragmentManager
-                        .findFragmentByTag(ProductListFragment.ARG_ITEM_ID);
+            if (fragmentManager.findFragmentByTag(DoctorListFragment.ARG_ITEM_ID) != null) {
+                pdtListFragment = (DoctorListFragment) fragmentManager
+                        .findFragmentByTag(DoctorListFragment.ARG_ITEM_ID);
                 contentFragment = pdtListFragment;
             }
         } else {
-            pdtListFragment = new ProductListFragment();
+            pdtListFragment = new DoctorListFragment();
             setFragmentTitle(R.string.app_name);
-            switchContent(pdtListFragment, ProductListFragment.ARG_ITEM_ID);
+            switchContent(pdtListFragment, DoctorListFragment.ARG_ITEM_ID);
         }
     }
 
@@ -56,7 +56,7 @@ public class MainActivity extends FragmentActivity {
         if (contentFragment instanceof FavoriteListFragment) {
             outState.putString("content", FavoriteListFragment.ARG_ITEM_ID);
         } else {
-            outState.putString("content", ProductListFragment.ARG_ITEM_ID);
+            outState.putString("content", DoctorListFragment.ARG_ITEM_ID);
         }
         super.onSaveInstanceState(outState);
     }
@@ -90,7 +90,7 @@ public class MainActivity extends FragmentActivity {
                     .beginTransaction();
             transaction.replace(R.id.content_frame, fragment, tag);
             //Only FavoriteListFragment is added to the back stack.
-            if (!(fragment instanceof ProductListFragment)) {
+            if (!(fragment instanceof DoctorListFragment)) {
                 transaction.addToBackStack(tag);
             }
             transaction.commit();
@@ -106,16 +106,16 @@ public class MainActivity extends FragmentActivity {
 
     /*
      * We call super.onBackPressed(); when the stack entry count is > 0. if it
-     * is instanceof ProductListFragment or if the stack entry count is == 0, then
+     * is instanceof DoctorListFragment or if the stack entry count is == 0, then
      * we finish the activity.
-     * In other words, from ProductListFragment on back press it quits the app.
+     * In other words, from DoctorListFragment on back press it quits the app.
      */
     @Override
     public void onBackPressed() {
         FragmentManager fm = getSupportFragmentManager();
         if (fm.getBackStackEntryCount() > 0) {
             super.onBackPressed();
-        } else if (contentFragment instanceof ProductListFragment
+        } else if (contentFragment instanceof DoctorListFragment
                 || fm.getBackStackEntryCount() == 0) {
             finish();
         }

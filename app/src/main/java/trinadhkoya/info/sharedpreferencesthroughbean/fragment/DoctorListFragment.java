@@ -22,7 +22,7 @@ import info.trinadhkoya.favouritessharedpref.adapter.ProductListAdapter;
 import info.trinadhkoya.favouritessharedpref.model.Product;
 import info.trinadhkoya.favouritessharedpref.utils.SharedPreference;
 
-public class ProductListFragment extends Fragment implements
+public class DoctorListFragment extends Fragment implements
         OnItemClickListener, OnItemLongClickListener {
 
     public static final String ARG_ITEM_ID = "product_list";

@@ -16,13 +16,13 @@ import java.util.List;
 import info.trinadhkoya.favouritessharedpref.model.Product;
 import info.trinadhkoya.favouritessharedpref.utils.SharedPreference;
 
-public class ProductListAdapter extends ArrayAdapter<Product> {
+public class DoctorListAdapter extends ArrayAdapter<Product> {
 
     List<Product> products;
     SharedPreference sharedPreference;
     private Context context;
 
-    public ProductListAdapter(Context context, List<Product> products) {
+    public DoctorListAdapter(Context context, List<Product> products) {
         super(context, R.layout.product_list_item, products);
         this.context = context;
         this.products = products;

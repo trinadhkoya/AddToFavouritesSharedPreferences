@@ -1,17 +1,17 @@
 package trinadhkoya.info.sharedpreferencesthroughbean.model;
 
-public class Product {
+public class Doctor {
 
     private int id;
     private String name;
     private String description;
     private double price;
 
-    public Product() {
+    public Doctor() {
         super();
     }
 
-    public Product(int id, String name, String description, double price) {
+    public Doctor(int id, String name, String description, double price) {
         super();
         this.id = id;
         this.name = name;
@@ -67,13 +67,13 @@ public class Product {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Product other = (Product) obj;
+        Doctor other = (Doctor) obj;
         return id == other.id;
     }
 
     @Override
     public String toString() {
-        return "Product [id=" + id + ", name=" + name + ", description="
+        return "Doctor [id=" + id + ", name=" + name + ", description="
                 + description + ", price=" + price + "]";
     }
 }

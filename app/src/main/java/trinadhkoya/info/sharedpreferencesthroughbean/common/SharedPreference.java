@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import trinadhkoya.info.sharedpreferencesthroughbean.model.Product;
+import trinadhkoya.info.sharedpreferencesthroughbean.model.Doctor;
 
 
 public class SharedPreference {
@@ -23,7 +23,7 @@ public class SharedPreference {
     }
 
     // This four methods are used for maintaining favorites.
-    public void saveFavorites(Context context, List<Product> favorites) {
+    public void saveFavorites(Context context, List<Doctor> favorites) {
         SharedPreferences settings;
         Editor editor;
 
@@ -39,25 +39,25 @@ public class SharedPreference {
         editor.commit();
     }
 
-    public void addFavorite(Context context, Product product) {
-        List<Product> favorites = getFavorites(context);
+    public void addFavorite(Context context, Doctor doctor) {
+        List<Doctor> favorites = getFavorites(context);
         if (favorites == null)
-            favorites = new ArrayList<Product>();
-        favorites.add(product);
+            favorites = new ArrayList<Doctor>();
+        favorites.add(doctor);
         saveFavorites(context, favorites);
     }
 
-    public void removeFavorite(Context context, Product product) {
-        ArrayList<Product> favorites = getFavorites(context);
+    public void removeFavorite(Context context, Doctor doctor) {
+        ArrayList<Doctor> favorites = getFavorites(context);
         if (favorites != null) {
-            favorites.remove(product);
+            favorites.remove(doctor);
             saveFavorites(context, favorites);
         }
     }
 
-    public ArrayList<Product> getFavorites(Context context) {
+    public ArrayList<Doctor> getFavorites(Context context) {
         SharedPreferences settings;
-        List<Product> favorites;
+        List<Doctor> favorites;
 
         settings = context.getSharedPreferences(PREFS_NAME,
                 Context.MODE_PRIVATE);
@@ -65,14 +65,14 @@ public class SharedPreference {
         if (settings.contains(FAVORITES)) {
             String jsonFavorites = settings.getString(FAVORITES, null);
             Gson gson = new Gson();
-            Product[] favoriteItems = gson.fromJson(jsonFavorites,
-                    Product[].class);
+            Doctor[] favoriteItems = gson.fromJson(jsonFavorites,
+                    Doctor[].class);
 
             favorites = Arrays.asList(favoriteItems);
-            favorites = new ArrayList<Product>(favorites);
+            favorites = new ArrayList<Doctor>(favorites);
         } else
             return null;
 
-        return (ArrayList<Product>) favorites;
+        return (ArrayList<Doctor>) favorites;
     }
 }
